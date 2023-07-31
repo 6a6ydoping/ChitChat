@@ -13,7 +13,7 @@ import (
 )
 
 func Run(cfg *config.Config) error {
-	db, err := pgrepo.NewSQL(
+	db, err := pgrepo.New(
 		pgrepo.WithHost(cfg.DB.Host),
 		pgrepo.WithPort(cfg.DB.Port),
 		pgrepo.WithDBName(cfg.DB.DBName),
