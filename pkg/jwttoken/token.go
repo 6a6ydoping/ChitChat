@@ -8,17 +8,17 @@ import (
 )
 
 type Token struct {
-	secretKey string
+	secretKey []byte
 }
 
-func New(secretKet string) *Token {
+func New(secretKet []byte) *Token {
 	return &Token{
 		secretKey: secretKet,
 	}
 }
 
 func (t Token) GenerateJWT(id int64, ttl time.Duration) (string, error) {
-	token := jwt.New(jwt.SigningMethodEdDSA)
+	token := jwt.New(jwt.SigningMethodHS512)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["exp"] = time.Now().Add(ttl)
 	claims["authorized"] = true

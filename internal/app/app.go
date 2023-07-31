@@ -33,7 +33,7 @@ func Run(cfg *config.Config) error {
 	//	return err
 	//}
 
-	token := jwttoken.New(cfg.Token.SecretKey)
+	token := jwttoken.New([]byte(cfg.Token.SecretKey))
 	service := service.New(db, token, cfg)
 	handler := handler.New(service)
 	server := httpserver.New(
