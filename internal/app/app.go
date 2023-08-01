@@ -43,6 +43,7 @@ func Run(cfg *config.Config) error {
 		httpserver.WithWriteTimeout(cfg.HTTP.WriteTimeout),
 		httpserver.WithShutdownTimeout(cfg.HTTP.ShutdownTimeout),
 	)
+	handler.WebsocketHandler = server
 
 	log.Println("server started")
 	server.Start()
