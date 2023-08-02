@@ -2,7 +2,6 @@ package handler
 
 import (
 	"github.com/6a6ydoping/ChitChat/internal/service"
-	"github.com/6a6ydoping/ChitChat/pkg/ws"
 	"github.com/gorilla/websocket"
 	"net/http"
 )
@@ -14,14 +13,14 @@ type WebsocketHandler interface {
 }
 
 type Handler struct {
-	service          service.Service
-	WebsocketHandler WebsocketHandler
-	Dispatcher       *ws.Dispatcher
+	userService       service.UserService
+	dispatcherService service.DispatcherService
+	WebsocketHandler  WebsocketHandler
 }
 
-func New(s service.Service) *Handler {
+func New(s service.UserService, ds service.DispatcherService) *Handler {
 	return &Handler{
-		service:    s,
-		Dispatcher: ws.NewDispatcher(),
+		userService:       s,
+		dispatcherService: ds,
 	}
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/6a6ydoping/ChitChat/internal/service"
 	"github.com/6a6ydoping/ChitChat/pkg/httpserver"
 	"github.com/6a6ydoping/ChitChat/pkg/jwttoken"
+	"github.com/6a6ydoping/ChitChat/pkg/ws"
 	"log"
 	"os"
 	"os/signal"
@@ -34,8 +35,10 @@ func Run(cfg *config.Config) error {
 	//}
 
 	token := jwttoken.New([]byte(cfg.Token.SecretKey))
-	service := service.New(db, token, cfg)
-	handler := handler.New(service)
+	d := ws.NewDispatcher()
+	go d.Run()
+	service := service.New(db, token, cfg, d)
+	handler := handler.New(service, service)
 	server := httpserver.New(
 		handler.InitRouter(),
 		httpserver.WithPort(cfg.HTTP.Port),

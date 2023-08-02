@@ -32,7 +32,7 @@ func (h *Handler) authMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		userID, err := h.service.VerifyToken(fields[1])
+		userID, err := h.userService.VerifyToken(fields[1])
 		if err != nil {
 			ctx.AbortWithStatusJSON(http.StatusUnauthorized, &api.Error{
 				Code:    -3,

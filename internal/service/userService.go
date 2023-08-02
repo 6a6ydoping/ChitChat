@@ -5,7 +5,7 @@ import (
 	"github.com/6a6ydoping/ChitChat/internal/entity"
 )
 
-type Service interface {
+type UserService interface {
 	// User
 	CreateUser(ctx context.Context, u *entity.User) error
 	Login(ctx context.Context, username, password string) (string, error)

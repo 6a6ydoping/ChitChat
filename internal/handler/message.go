@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"fmt"
 	"github.com/6a6ydoping/ChitChat/api"
 	"github.com/6a6ydoping/ChitChat/pkg/ws"
 	"github.com/gin-gonic/gin"
@@ -24,25 +25,55 @@ func (h *Handler) createRoom(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-
-	h.Dispatcher.Rooms[req.ID] = &ws.Room{
-		ID:      req.ID,
-		Name:    req.Name,
-		Clients: make(map[string]*ws.Client),
+	r := &ws.Room{
+		ID:   req.ID,
+		Name: req.Name,
 	}
+	fmt.Println(r)
+	h.dispatcherService.CreateRoom(r)
 
 	c.JSON(http.StatusOK, req)
 }
 
-func (h *Handler) getRooms(c *gin.Context) {
-	rooms := make([]api.RoomRes, 0)
-
-	for _, r := range h.Dispatcher.Rooms {
-		rooms = append(rooms, api.RoomRes{
-			ID:   r.ID,
-			Name: r.Name,
-		})
-	}
-
-	c.JSON(http.StatusOK, rooms)
-}
+//func (h *Handler) getRooms(c *gin.Context) {
+//	rooms := make([]api.RoomRes, 0)
+//
+//	for _, r := range h.Dispatcher.Rooms {
+//		rooms = append(rooms, api.RoomRes{
+//			ID:   r.ID,
+//			Name: r.Name,
+//		})
+//	}
+//
+//	c.JSON(http.StatusOK, rooms)
+//}
+//
+//func (h *Handler) joinRoom(ctx *gin.Context) {
+//	conn, err := h.WebsocketHandler.Upgrade(ctx.Writer, ctx.Request)
+//	if err != nil {
+//		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+//		return
+//	}
+//
+//	roomID := ctx.Param("roomId")
+//
+//	cl := &ws.Client{
+//		Conn:     conn,
+//		Message:  make(chan *ws.Message, 10),
+//		ID:       "",
+//		RoomID:   roomID,
+//		Username: "",
+//	}
+//
+//	m := &ws.Message{
+//		Content:  "A new user has joined the room",
+//		RoomID:   roomID,
+//		Username: "",
+//	}
+//
+//	h.Dispatcher.Register <- cl
+//	h.Dispatcher.Broadcast <- m
+//
+//	go cl.WriteMessage()
+//	cl.ReadMessage(h.Dispatcher)
+//}

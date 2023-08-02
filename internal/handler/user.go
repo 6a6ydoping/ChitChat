@@ -21,7 +21,7 @@ func (h *Handler) createUser(ctx *gin.Context) {
 		return
 	}
 	fmt.Println(req)
-	err = h.service.CreateUser(ctx, &req.User)
+	err = h.userService.CreateUser(ctx, &req.User)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, &api.Error{
 			Code:    -2,
@@ -46,7 +46,7 @@ func (h *Handler) loginUser(ctx *gin.Context) {
 		return
 	}
 
-	accessToken, err := h.service.Login(ctx, req.Username, req.Password)
+	accessToken, err := h.userService.Login(ctx, req.Username, req.Password)
 	if err != nil {
 		ctx.JSON(http.StatusInternalServerError, &api.Error{
 			Code:    -2,

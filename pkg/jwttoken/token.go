@@ -91,7 +91,7 @@ func (t Token) VerifyJWT(endpointHandler func(writer http.ResponseWriter, reques
 	})
 }
 
-func (t Token) ExtractClaims(_ http.ResponseWriter, request *http.Request) (string, error) {
+func (t Token) ExtractClaims(_ http.ResponseWriter, request *http.Request) (map[string]string, error) {
 	if request.Header["Token"] != nil {
 		tokenString := request.Header["Token"][0]
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
@@ -102,15 +102,17 @@ func (t Token) ExtractClaims(_ http.ResponseWriter, request *http.Request) (stri
 			return t.secretKey, nil
 		})
 		if err != nil {
-			return "Error Parsing Token: ", err
+			return nil, err
 		}
 		claims, ok := token.Claims.(jwt.MapClaims)
 		if ok && token.Valid {
 			// Claims fields
-			username := claims["username"].(string)
-			return username, nil
+			m := make(map[string]string)
+			m["id"] = claims["id"].(string)
+			m["username"] = claims["username"].(string)
+			return m, nil
 		}
 	}
 
-	return "unable to extract claims", nil
+	return nil, nil
 }
