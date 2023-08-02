@@ -40,7 +40,7 @@ func (m *Manager) Login(ctx context.Context, username, password string) (string,
 		return "", fmt.Errorf("incorrect password: %w", err)
 	}
 
-	accessToken, err := m.Token.GenerateJWT(user.ID, m.Config.Token.TimeToLive)
+	accessToken, err := m.Token.GenerateJWT(user.ID, username, m.Config.Token.TimeToLive)
 	if err != nil {
 		return "", fmt.Errorf("create token err: %w", err)
 	}

@@ -17,12 +17,13 @@ func New(secretKet []byte) *Token {
 	}
 }
 
-func (t Token) GenerateJWT(id int64, ttl time.Duration) (string, error) {
+func (t Token) GenerateJWT(id int64, username string, ttl time.Duration) (string, error) {
 	token := jwt.New(jwt.SigningMethodHS512)
 	claims := token.Claims.(jwt.MapClaims)
 	claims["exp"] = time.Now().Add(ttl)
 	claims["authorized"] = true
 	claims["user_id"] = id
+	claims["username"] = username
 	tokenString, err := token.SignedString(t.secretKey)
 	if err != nil {
 		return "Signing Error", err
