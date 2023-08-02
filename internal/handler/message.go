@@ -35,19 +35,11 @@ func (h *Handler) createRoom(c *gin.Context) {
 	c.JSON(http.StatusOK, req)
 }
 
-//func (h *Handler) getRooms(c *gin.Context) {
-//	rooms := make([]api.RoomRes, 0)
-//
-//	for _, r := range h.Dispatcher.Rooms {
-//		rooms = append(rooms, api.RoomRes{
-//			ID:   r.ID,
-//			Name: r.Name,
-//		})
-//	}
-//
-//	c.JSON(http.StatusOK, rooms)
-//}
-//
+func (h *Handler) getRooms(c *gin.Context) {
+	rooms := h.dispatcherService.GetRooms()
+	c.JSON(http.StatusOK, rooms)
+}
+
 //func (h *Handler) joinRoom(ctx *gin.Context) {
 //	conn, err := h.WebsocketHandler.Upgrade(ctx.Writer, ctx.Request)
 //	if err != nil {

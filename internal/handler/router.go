@@ -18,7 +18,7 @@ func (h *Handler) InitRouter() *gin.Engine {
 	message.GET("", h.handleMessage)
 
 	//Room routes
-	//room.GET("", h.getRooms)
+	room.GET("", h.getRooms)
 	room.POST("", h.createRoom)
 
 	apiV1.Use(h.authMiddleware())
