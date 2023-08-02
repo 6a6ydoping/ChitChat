@@ -40,32 +40,22 @@ func (h *Handler) getRooms(c *gin.Context) {
 	c.JSON(http.StatusOK, rooms)
 }
 
-//func (h *Handler) joinRoom(ctx *gin.Context) {
-//	conn, err := h.WebsocketHandler.Upgrade(ctx.Writer, ctx.Request)
-//	if err != nil {
-//		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-//		return
-//	}
-//
-//	roomID := ctx.Param("roomId")
-//
-//	cl := &ws.Client{
-//		Conn:     conn,
-//		Message:  make(chan *ws.Message, 10),
-//		ID:       "",
-//		RoomID:   roomID,
-//		Username: "",
-//	}
-//
-//	m := &ws.Message{
-//		Content:  "A new user has joined the room",
-//		RoomID:   roomID,
-//		Username: "",
-//	}
-//
-//	h.Dispatcher.Register <- cl
-//	h.Dispatcher.Broadcast <- m
-//
-//	go cl.WriteMessage()
-//	cl.ReadMessage(h.Dispatcher)
-//}
+func (h *Handler) joinRoom(ctx *gin.Context) {
+	authToken := ctx.Request.Header.Get("Authorization")
+	conn, err := h.WebsocketHandler.Upgrade(ctx.Writer, ctx.Request)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println(1)
+		return
+	}
+
+	roomID := ctx.Param("roomID")
+
+	err = h.dispatcherService.JoinRoom(conn, authToken, roomID)
+	if err != nil {
+		fmt.Println(err)
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		fmt.Println(2)
+		return
+	}
+}
