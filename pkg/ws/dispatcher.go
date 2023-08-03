@@ -1,5 +1,7 @@
 package ws
 
+import "fmt"
+
 type Dispatcher struct {
 	Rooms      map[string]*Room
 	Register   chan *Client
@@ -33,6 +35,9 @@ func (d *Dispatcher) Run() {
 				// Check if user already in the room
 				if _, ok := r.Clients[client.ID]; !ok {
 					r.Clients[client.ID] = client
+					for _, cl := range d.Rooms[client.RoomID].Clients {
+						fmt.Println(cl.Username)
+					}
 				}
 			}
 		// Leave Room

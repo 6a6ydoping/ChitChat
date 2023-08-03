@@ -1,9 +1,19 @@
 package handler
 
-import "github.com/gin-gonic/gin"
+import (
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+)
 
 func (h *Handler) InitRouter() *gin.Engine {
 	router := gin.Default()
+
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
+	config.AllowCredentials = true
+	config.AllowHeaders = []string{"Authorization", "Content-Type"}
+	router.Use(cors.New(config))
 
 	apiV1 := router.Group("/api/v1")
 
@@ -20,9 +30,10 @@ func (h *Handler) InitRouter() *gin.Engine {
 	message.GET("", h.handleMessage)
 
 	//Room routes
+	apiV1.GET("/join/:roomID", h.joinRoom)
 	room.GET("", h.getRooms)
 	room.POST("", h.createRoom)
-	room.GET("/join/:roomID", h.joinRoom)
+	room.GET("/:roomID/info", h.getClients)
 
 	return router
 }

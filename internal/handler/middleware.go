@@ -41,6 +41,11 @@ func (h *Handler) authMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		if ctx.Request.Method == "OPTIONS" {
+			ctx.AbortWithStatus(204)
+			return
+		}
+
 		ctx.Set(authUserID, userID)
 		ctx.Next()
 	}

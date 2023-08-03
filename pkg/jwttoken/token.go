@@ -109,7 +109,7 @@ func (t Token) ExtractClaims(_ http.ResponseWriter, request *http.Request) (map[
 		if ok && token.Valid {
 			// Claims fields
 			m := make(map[string]string)
-			m["id"] = claims["id"].(string)
+			m["user_id"] = claims["id"].(string)
 			m["username"] = claims["username"].(string)
 			return m, nil
 		}
@@ -119,12 +119,11 @@ func (t Token) ExtractClaims(_ http.ResponseWriter, request *http.Request) (map[
 }
 
 func (t Token) ExtractClaimsFromString(tokenString string) (map[string]string, error) {
-	// Split the token string to remove the Bearer  prefix
-	tokenParts := strings.Fields(tokenString)
-	if len(tokenParts) != 2 || strings.ToLower(tokenParts[0]) != "bearer" {
-		return nil, fmt.Errorf("invalid token format")
+	// Check for "Bearer" prefix and remove it if it exists
+	prefix := "Bearer "
+	if strings.HasPrefix(tokenString, prefix) {
+		tokenString = strings.TrimPrefix(tokenString, prefix)
 	}
-	tokenString = tokenParts[1]
 
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if token.Method.Alg() != jwt.SigningMethodHS512.Alg() {
@@ -140,7 +139,7 @@ func (t Token) ExtractClaimsFromString(tokenString string) (map[string]string, e
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		// Claims fields
 		m := make(map[string]string)
-		m["id"] = fmt.Sprintf("%v", claims["id"])
+		m["user_id"] = fmt.Sprintf("%v", claims["user_id"])
 		m["username"] = fmt.Sprintf("%v", claims["username"])
 
 		return m, nil
