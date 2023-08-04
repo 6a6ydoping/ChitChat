@@ -1,8 +1,11 @@
 package handler
 
 import (
+	_ "github.com/6a6ydoping/ChitChat/docs"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func (h *Handler) InitRouter() *gin.Engine {
@@ -14,6 +17,8 @@ func (h *Handler) InitRouter() *gin.Engine {
 	config.AllowCredentials = true
 	config.AllowHeaders = []string{"Authorization", "Content-Type"}
 	router.Use(cors.New(config))
+
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	apiV1 := router.Group("/api/v1")
 

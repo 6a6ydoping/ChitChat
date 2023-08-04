@@ -19,6 +19,19 @@ func (h *Handler) handleMessage(ctx *gin.Context) {
 	h.WebsocketHandler.HandleWebSocket(conn)
 }
 
+// createRoom creates room
+//
+//	@Summary		Create room
+//	@Description	Creates room for websocket connections
+//	@Tags			Rooms
+//	@Accept			json
+//	@Produce		json
+//	@Param			req	body	api.CreateRoomReq	true	"req body"
+//
+//	@Success		201
+//	@Failure		400	{object}	api.Error
+//	@Failure		500	{object}	api.Error
+//	@Router			/room [post]
 func (h *Handler) createRoom(c *gin.Context) {
 	var req api.CreateRoomReq
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -31,9 +44,20 @@ func (h *Handler) createRoom(c *gin.Context) {
 	}
 	h.dispatcherService.CreateRoom(r)
 
-	c.JSON(http.StatusOK, req)
+	c.JSON(http.StatusCreated, req)
 }
 
+// getRooms list created rooms
+//
+//	@Summary		Get Rooms
+//	@Description	List all active rooms
+//	@Tags			Rooms
+//	@Produce		json
+//
+//	@Success		200	{array}		api.RoomRes
+//	@Failure		400	{object}	api.Error
+//	@Failure		500	{object}	api.Error
+//	@Router			/room [get]
 func (h *Handler) getRooms(c *gin.Context) {
 	rooms := h.dispatcherService.GetRooms()
 	c.JSON(http.StatusOK, rooms)

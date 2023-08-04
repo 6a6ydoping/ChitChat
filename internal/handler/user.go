@@ -8,6 +8,19 @@ import (
 	"net/http"
 )
 
+// createUser registration new user
+//
+//	@Summary		Create user
+//	@Description	Create new user
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			req	body	api.RegisterRequest	true	"req body"
+//
+//	@Success		201
+//	@Failure		400	{object}	api.Error
+//	@Failure		500	{object}	api.Error
+//	@Router			/user/register [post]
 func (h *Handler) createUser(ctx *gin.Context) {
 	var req api.RegisterRequest
 
@@ -33,6 +46,19 @@ func (h *Handler) createUser(ctx *gin.Context) {
 	ctx.Status(http.StatusCreated)
 }
 
+// loginUser log in as an existing user
+//
+//	@Summary		Login user
+//	@Description	Log in as an existing user and get auth token
+//	@Tags			auth
+//	@Accept			json
+//	@Produce		json
+//	@Param			req	body	api.LoginRequest	true	"req body"
+//
+//	@Success		200
+//	@Failure		400	{object}	api.Error
+//	@Failure		500	{object}	api.Error
+//	@Router			/user/login [post]
 func (h *Handler) loginUser(ctx *gin.Context) {
 	var req api.LoginRequest
 
