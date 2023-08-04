@@ -9,4 +9,6 @@ type Repository interface {
 	// User
 	CreateUser(ctx context.Context, u *entity.User) error
 	GetUser(ctx context.Context, username string) (*entity.User, error)
+	UpdateUser(ctx context.Context, u *entity.User) error
+	DeleteUser(ctx context.Context, id int64) error
 }

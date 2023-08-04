@@ -42,3 +42,29 @@ func (p *Postgres) GetUser(ctx context.Context, username string) (*entity.User, 
 
 	return &dbUser, nil
 }
+
+func (p *Postgres) UpdateUser(ctx context.Context, user *entity.User) error {
+	query := fmt.Sprintf(`
+		UPDATE %s
+		SET username = $2, password = $3
+		WHERE id = $1
+	`, usersTable)
+
+	_, err := p.Pool.Exec(ctx, query, user.ID, user.Username, user.Password)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (p *Postgres) DeleteUser(ctx context.Context, userID int64) error {
+	query := fmt.Sprintf(`DELETE FROM %s WHERE id = $1`, usersTable)
+
+	_, err := p.Pool.Exec(ctx, query, userID)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
