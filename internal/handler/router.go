@@ -40,12 +40,3 @@ func (h *Handler) InitRouter() *gin.Engine {
 
 	return router
 }
-
-func customCors() cors.Config {
-	config := cors.DefaultConfig()
-	config.AllowAllOrigins = true
-	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
-	config.AllowCredentials = true
-	config.AllowHeaders = []string{"Authorization", "Content-Type"}
-	return config
-}
