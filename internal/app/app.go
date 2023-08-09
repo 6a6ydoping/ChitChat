@@ -27,13 +27,6 @@ func Run(cfg *config.Config) error {
 	}
 	log.Println("connection success")
 
-	//migration := pgrepo.NewMigrate(cfg)
-	//
-	//err = migration.MigrateToVersion(cfg.DB.MigrationVersion)
-	//if err != nil {
-	//	return err
-	//}
-
 	token := jwttoken.New([]byte(cfg.Token.SecretKey))
 	d := ws.NewDispatcher()
 	go d.Run()
